@@ -3,6 +3,7 @@ package com.ruoyi.system.domain;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 import lombok.Data;
+import java.util.List;
 
 /**
  * 新闻对象 sys_news
@@ -24,6 +25,9 @@ public class SysNews extends BaseEntity
 
     /** 所属分类ID */
     private Long categoryId;
+
+    /** 分类ID列表（用于多分类查询） */
+    private List<Long> categoryIds;
 
     /** 分类名称（关联查询用） */
     @Excel(name = "分类名称")

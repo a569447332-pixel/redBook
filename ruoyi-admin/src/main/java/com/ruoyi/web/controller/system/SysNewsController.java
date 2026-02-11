@@ -38,6 +38,8 @@ public class SysNewsController extends BaseController
         return getDataTable(list);
     }
 
+
+
     /**
      * 获取新闻详细信息
      */
@@ -45,6 +47,7 @@ public class SysNewsController extends BaseController
     @GetMapping(value = "/{newsId}")
     public AjaxResult getInfo(@PathVariable Long newsId)
     {
+
         return AjaxResult.success(sysNewsService.selectSysNewsById(newsId));
     }
 

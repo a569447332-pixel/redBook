@@ -116,6 +116,7 @@ public class SecurityConfig
                     .antMatchers(HttpMethod.GET, "/", "/*.html", "/**/*.html", "/**/*.css", "/**/*.js", "/profile/**").permitAll()
                         // 放行客户端新闻接口（核心）
                         .antMatchers("/app/news/**").permitAll()
+                        .antMatchers("/app/api/**").permitAll()
                         .antMatchers("/swagger-ui.html", "/swagger-resources/**", "/webjars/**", "/*/api-docs", "/druid/**").permitAll()
                     // 除上面外的所有请求全部需要鉴权认证
                     .anyRequest().authenticated();

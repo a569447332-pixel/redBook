@@ -11,6 +11,13 @@ import java.util.List;
  */
 public interface SysNewsMapper
 {
+
+    /**
+     * 根据分类ID列表查询新闻
+     */
+    public List<SysNews> selectNewsByCategoryIds(SysNews sysNews);
+
+
     /**
      * 查询新闻列表
      *

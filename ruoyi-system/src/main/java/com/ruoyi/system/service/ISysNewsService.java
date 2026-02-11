@@ -11,6 +11,15 @@ import java.util.List;
  */
 public interface ISysNewsService
 {
+
+    /**
+     * 查询新闻列表
+     *
+     * @param sysNews 新闻
+     * @return 新闻集合
+     */
+    public List<SysNews> selectNewsByCategoryIds(SysNews sysNews);
+
     /**
      * 查询新闻列表
      *

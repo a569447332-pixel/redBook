@@ -39,7 +39,11 @@
 
     <select id="selectSysNewsCategoryTree" parameterType="com.ruoyi.system.domain.SysNewsCategory" resultMap="SysNewsCategoryResult">
         <include refid="selectSysNewsCategoryVo"/>
-        where status = '0'
+        <where>
+            <if test="status != null and status != ''">
+                AND status = #{status}
+            </if>
+        </where>
         order by sort asc
     </select>
 

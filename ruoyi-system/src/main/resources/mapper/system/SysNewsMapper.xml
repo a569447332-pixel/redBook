@@ -31,6 +31,21 @@
         LEFT JOIN sys_news_category c ON n.category_id = c.category_id
     </sql>
 
+    <!-- 根据分类ID列表查询新闻 -->
+    <select id="selectNewsByCategoryIds" parameterType="com.ruoyi.system.domain.SysNews" resultMap="SysNewsResult">
+        SELECT * FROM sys_news
+        WHERE status = '0'
+        <if test="categoryIds != null and categoryIds.size() > 0">
+            AND category_id IN
+            <foreach collection="categoryIds" item="categoryId" open="(" separator="," close=")">
+                #{categoryId}
+            </foreach>
+        </if>
+        <!-- 把 publish_time 改成你表中实际存在的时间字段，例如 create_time -->
+        ORDER BY create_time DESC
+    </select>
+
+
     <!-- 查询新闻列表（带条件） -->
     <select id="selectSysNewsList" parameterType="com.ruoyi.system.domain.SysNews" resultMap="SysNewsResult">
         <include refid="selectSysNewsVo" />
@@ -101,7 +116,7 @@
             <if test="viewCount != null">view_count = #{viewCount},</if>
             <if test="status != null">status = #{status},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
-            <if test="updateTime != null">update_time = SysNews#{updateTime},</if>
+
             <if test="remark != null">remark = #{remark}</if>
         </set>
         WHERE news_id = #{newsId}

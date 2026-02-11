@@ -20,6 +20,16 @@ public class SysNewsServiceImpl implements ISysNewsService
     @Autowired
     private SysNewsMapper sysNewsMapper;
 
+
+    /**
+     * 查询新闻列表
+     */
+
+    @Override
+    public List<SysNews> selectNewsByCategoryIds(SysNews sysNews) {
+        return sysNewsMapper.selectNewsByCategoryIds(sysNews);
+    }
+
     /**
      * 查询新闻列表
      */
@@ -55,6 +65,7 @@ public class SysNewsServiceImpl implements ISysNewsService
     {
         return sysNewsMapper.updateSysNews(sysNews);
     }
+
 
     /**
      * 删除新闻信息
