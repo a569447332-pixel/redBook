@@ -45,6 +45,12 @@
             <artifactId>hutool-all</artifactId>
             <version>5.7.16</version>
         </dependency>
+        <!-- 若依根 pom.xml 中 MyBatis Plus 依赖 -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>3.4.3.4</version> <!-- 若依默认版本，无需修改 -->
+        </dependency>
 
     </dependencies>
 

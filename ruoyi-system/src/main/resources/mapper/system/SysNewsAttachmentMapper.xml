@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SysNewsAttachmentMapper">
+    <resultMap type="SysNewsAttachment" id="SysNewsAttachmentResult">
+        <id     property="attachmentId"    column="attachment_id"    />
+        <result property="newsId"          column="news_id"          />
+        <result property="fileName"        column="file_name"        />
+        <result property="filePath"        column="file_path"        />
+        <result property="fileSize"        column="file_size"        />
+        <result property="fileType"        column="file_type"        />
+        <result property="fileExt"         column="file_ext"         />
+        <result property="sort"            column="sort"             />
+        <result property="status"          column="status"           />
+        <result property="createBy"        column="create_by"        />
+        <result property="createTime"      column="create_time"      />
+        <result property="updateBy"        column="update_by"        />
+        <result property="updateTime"      column="update_time"      />
+        <result property="remark"          column="remark"           />
+    </resultMap>
+
+    <sql id="selectSysNewsAttachmentVo">
+        select attachment_id, news_id, file_name, file_path, file_size, file_type, file_ext, sort, status, create_by, create_time, update_by, update_time, remark
+        from sys_news_attachment
+    </sql>
+
+    <!-- 新增附件 -->
+    <insert id="insertSysNewsAttachment" parameterType="SysNewsAttachment" useGeneratedKeys="true" keyProperty="attachmentId">
+        insert into sys_news_attachment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="newsId != null">news_id,</if>
+            <if test="fileName != null">file_name,</if>
+            <if test="filePath != null">file_path,</if>
+            <if test="fileSize != null">file_size,</if>
+            <if test="fileType != null">file_type,</if>
+            <if test="fileExt != null">file_ext,</if>
+            <if test="sort != null">sort,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="newsId != null">#{newsId},</if>
+            <if test="fileName != null">#{fileName},</if>
+            <if test="filePath != null">#{filePath},</if>
+            <if test="fileSize != null">#{fileSize},</if>
+            <if test="fileType != null">#{fileType},</if>
+            <if test="fileExt != null">#{fileExt},</if>
+            <if test="sort != null">#{sort},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <!-- 按新闻ID查附件 -->
+    <select id="selectSysNewsAttachmentByNewsId" parameterType="Long" resultMap="SysNewsAttachmentResult">
+        <include refid="selectSysNewsAttachmentVo"/>
+        where news_id = #{newsId} and status = '0'
+        order by sort asc, create_time desc
+    </select>
+
+    <!-- 批量删除附件 -->
+    <delete id="deleteSysNewsAttachmentByIds" parameterType="Long">
+        <include refid="selectSysNewsAttachmentVo"/>
+        where attachment_id in
+        <foreach item="attachmentId" collection="array" open="(" separator="," close=")">
+            #{attachmentId}
+        </foreach>
+    </delete>
+
+    <!-- 修改附件排序 -->
+    <update id="updateSysNewsAttachmentSort">
+        update sys_news_attachment
+        set sort = #{sort}
+        where attachment_id = #{attachmentId}
+    </update>
+</mapper>

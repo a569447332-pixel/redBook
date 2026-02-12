@@ -93,5 +93,11 @@
 
     <delete id="deleteSysNewsCategoryById" parameterType="Long">
         delete from sys_news_category where category_id = #{categoryId}
+        <foreach item="categoryId" collection="array" open="(" separator="," close=")">
+            #{noticeId}
+        </foreach>
     </delete>
+
+
+
 </mapper>

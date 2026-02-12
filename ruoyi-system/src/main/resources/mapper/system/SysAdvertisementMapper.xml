@@ -11,7 +11,6 @@
         <result property="categoryName"    column="category_name"    />
         <result property="adImage"    column="ad_image"    />
         <result property="adUrl"    column="ad_url"    />
-        <result property="adBackupParams"    column="ad_backupp_params"    />
         <result property="sort"    column="sort"    />
         <result property="status"    column="status"    />
         <result property="startTime"    column="start_time"    />
@@ -21,10 +20,11 @@
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
         <result property="remark"    column="remark"    />
+        <result property="adBackupParams" column="ad_backup_params"/>
     </resultMap>
 
     <sql id="selectSysAdvertisementVo">
-        select a.ad_id, a.ad_name, a.category_id, c.category_name, a.ad_image, a.ad_url, a.ad_backup_params, a.sort, a.status, a.start_time, a.end_time, a.create_by, a.create_time, a.update_by, a.update_time, a.remark
+        select a.ad_id, a.ad_name, a.category_id, c.category_name, a.ad_image, a.ad_url, a.sort, a.status, a.start_time, a.end_time, a.create_by, a.create_time, a.update_by, a.update_time, a.remark, a.ad_backup_params
         from sys_advertisement a
         left join sys_ad_category c on a.category_id = c.category_id
     </sql>
@@ -57,7 +57,6 @@
             <if test="categoryId != null">category_id,</if>
             <if test="adImage != null and adImage != ''">ad_image,</if>
             <if test="adUrl != null and adUrl != ''">ad_url,</if>
-            <if test="adBackupParams != null and adBackupParams != ''">ad_backup_params,</if>
             <if test="sort != null">sort,</if>
             <if test="status != null and status != ''">status,</if>
             <if test="startTime != null">start_time,</if>
@@ -65,13 +64,13 @@
             <if test="createBy != null and createBy != ''">create_by,</if>
             <if test="createTime != null">create_time,</if>
             <if test="remark != null and remark != ''">remark,</if>
+            <if test="adBackupParams != null and adBackupParams != ''">ad_backup_params,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="adName != null and adName != ''">#{adName},</if>
             <if test="categoryId != null">#{categoryId},</if>
             <if test="adImage != null and adImage != ''">#{adImage},</if>
             <if test="adUrl != null and adUrl != ''">#{adUrl},</if>
-            <if test="adBackupParams != null and adBackupParams != ''">#{adBackupParams},</if>
             <if test="sort != null">#{sort},</if>
             <if test="status != null and status != ''">#{status},</if>
             <if test="startTime != null">#{startTime},</if>
@@ -79,6 +78,7 @@
             <if test="createBy != null and createBy != ''">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="remark != null and remark != ''">#{remark},</if>
+            <if test="adBackupParams != null and adBackupParams != ''">#{adBackupParams},</if>
         </trim>
     </insert>
 
@@ -89,7 +89,6 @@
             <if test="categoryId != null">category_id = #{categoryId},</if>
             <if test="adImage != null and adImage != ''">ad_image = #{adImage},</if>
             <if test="adUrl != null and adUrl != ''">ad_url = #{adUrl},</if>
-            <if test="adBackupParams != null and adBackupParams != ''">ad_backup_params = #{adBackupParams},</if>
             <if test="sort != null">sort = #{sort},</if>
             <if test="status != null and status != ''">status = #{status},</if>
             <if test="startTime != null">start_time = #{startTime},</if>
@@ -97,6 +96,7 @@
             <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="remark != null and remark != ''">remark = #{remark},</if>
+            <if test="adBackupParams != null and adBackupParams != ''">ad_backup_params = #{adBackupParams},</if>
         </trim>
         where ad_id = #{adId}
     </update>
