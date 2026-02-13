@@ -56,18 +56,7 @@ public class SysNewsAttachmentServiceImpl implements ISysNewsAttachmentService {
 
     @Override
     public int deleteSysNewsAttachmentByIds(Long[] attachmentIds) throws Exception {
-        // 1. 查询附件信息，删除物理文件
-        for (Long attachmentId : attachmentIds) {
-            SysNewsAttachment attachment = sysNewsAttachmentMapper.selectSysNewsAttachmentByNewsId(attachmentId);
-            if (attachment != null && StringUtils.isNotEmpty(attachment.getFilePath())) {
-                // 拼接物理文件路径
-                String realPath = profile + "/" + attachment.getFilePath();
-                File realFile = new File(realPath);
-                if (realFile.exists()) {
-                    realFile.delete(); // 删除物理文件
-                }
-            }
-        }
+     
         // 2. 删除数据库记录
         return sysNewsAttachmentMapper.deleteSysNewsAttachmentByIds(attachmentIds);
     }

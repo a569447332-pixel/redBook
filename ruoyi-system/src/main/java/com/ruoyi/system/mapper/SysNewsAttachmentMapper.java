@@ -37,4 +37,14 @@ public interface SysNewsAttachmentMapper {
      * @return 结果
      */
     int updateSysNewsAttachmentSort(@Param("attachmentId") Long attachmentId, @Param("sort") Integer sort);
+
+    /**
+     * 根据附件ID更新附件信息
+     */
+    int updateSysNewsAttachmentById(SysNewsAttachment attachment);
+
+    /**
+     * 根据新闻ID查询所有附件的ID列表（用于筛选冗余附件）
+     */
+    List<Long> selectAttachmentIdsByNewsId(Long newsId);
 }

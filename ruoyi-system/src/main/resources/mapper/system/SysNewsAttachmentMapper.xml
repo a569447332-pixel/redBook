@@ -78,4 +78,28 @@
         set sort = #{sort}
         where attachment_id = #{attachmentId}
     </update>
+
+
+    <!-- SysNewsAttachmentMapper.xml -->
+    <!-- 更新附件信息 -->
+    <update id="updateSysNewsAttachmentById" parameterType="SysNewsAttachment">
+        update sys_news_attachment
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="fileName != null">file_name = #{fileName},</if>
+            <if test="filePath != null">file_path = #{filePath},</if>
+            <if test="fileSize != null">file_size = #{fileSize},</if>
+            <if test="fileType != null">file_type = #{fileType},</if>
+            <if test="fileExt != null">file_ext = #{fileExt},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where attachment_id = #{attachmentId}
+    </update>
+
+    <!-- 查询新闻下所有附件ID -->
+    <select id="selectAttachmentIdsByNewsId" parameterType="Long" resultType="Long">
+    select attachment_id from sys_news_attachment where news_id = #{newsId}
+</select>
 </mapper>

@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.data.redis.core.RedisTemplate;
 import com.ruoyi.common.constant.CacheConstants;
 import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.core.domain.model.LoginUser;
@@ -19,9 +20,20 @@ import com.ruoyi.common.utils.http.UserAgentUtils;
 import com.ruoyi.common.utils.ip.AddressUtils;
 import com.ruoyi.common.utils.ip.IpUtils;
 import com.ruoyi.common.utils.uuid.IdUtils;
+import com.ruoyi.common.core.domain.model.AppLoginUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import com.ruoyi.common.constant.Constants;
+import com.ruoyi.common.core.domain.model.AppLoginUser;
+import com.ruoyi.common.utils.uuid.IdUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Service;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
 
 /**
  * token验证处理
@@ -31,6 +43,12 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @Component
 public class TokenService
 {
+
+
+
+    @Autowired
+    private RedisTemplate<Object, Object> redisTemplate;
+
     private static final Logger log = LoggerFactory.getLogger(TokenService.class);
 
     // 令牌自定义标识
@@ -189,12 +207,21 @@ public class TokenService
      * @param token 令牌
      * @return 数据声明
      */
-    private Claims parseToken(String token)
-    {
-        return Jwts.parser()
-                .setSigningKey(secret)
-                .parseClaimsJws(token)
-                .getBody();
+    public Claims parseToken(String token) {
+        try {
+            // 移除Bearer前缀（如果有的话）
+            if (token.startsWith("Bearer ")) {
+                token = token.substring(7);
+            }
+            // 解析JWT，获取Claims（包含自定义的type字段）
+            return Jwts.parser()
+                    .setSigningKey(secret.getBytes()) // 用配置的密钥解析
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (Exception e) {
+            log.error("解析JWT Token失败: {}", e.getMessage());
+            return null;
+        }
     }
 
     /**
@@ -223,6 +250,56 @@ public class TokenService
             token = token.replace(Constants.TOKEN_PREFIX, "");
         }
         return token;
+    }
+
+
+
+    /**
+     * 创建 App 登录令牌（独立于后台 JWT Token）
+     */
+    /**
+     * 创建 App 端 JWT Token（和后台格式一致，带 app 标识）
+     */
+    /**
+     * 创建 App 登录令牌（带type:app标识）
+     */
+    public String createAppToken(AppLoginUser appLoginUser) {
+        String token = IdUtils.fastUUID();
+        appLoginUser.setToken(token);
+        appLoginUser.setLoginTime(System.currentTimeMillis());
+        long expireTime = System.currentTimeMillis() + 2592000 * 1000L;
+        appLoginUser.setExpireTime(expireTime);
+
+        // 1. 保存AppLoginUser到Redis
+        String redisKey = Constants.APP_LOGIN_TOKEN_KEY + token;
+        redisTemplate.opsForValue().set(redisKey, appLoginUser, 2592000, TimeUnit.SECONDS);
+
+        // 2. 生成带type:app的JWT Token（关键：让原生过滤器识别）
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("type", "app"); // 添加App类型标识
+        claims.put(Constants.APP_LOGIN_TOKEN_KEY, token);
+        return createToken(claims); // 生成JWT
+    }
+
+    /**
+     * 从 Redis 中获取 App 登录用户信息
+     */
+    /**
+     * 从 Redis 中获取 App 登录用户信息
+     */
+    public AppLoginUser getAppLoginUserFromRedis(String token) {
+        if (StringUtils.isBlank(token)) {
+            return null;
+        }
+        try {
+            String key = Constants.APP_LOGIN_TOKEN_KEY + token;
+            // 核心修复：补充分号 + 强转类型 + 空值判断
+            Object obj = redisTemplate.opsForValue().get(key);
+            return obj != null ? (AppLoginUser) obj : null;
+        } catch (Exception e) {
+            log.error("从Redis获取App登录用户信息失败", e);
+            return null;
+        }
     }
 
     private String getTokenKey(String uuid)

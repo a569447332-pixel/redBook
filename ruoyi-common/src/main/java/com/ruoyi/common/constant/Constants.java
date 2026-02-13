@@ -11,6 +11,10 @@ import io.jsonwebtoken.Claims;
 public class Constants
 {
     /**
+     * APP登录令牌缓存key前缀
+     */
+    public static final String APP_LOGIN_TOKEN_KEY = "app_login_token:";
+    /**
      * UTF-8 字符集
      */
     public static final String UTF8 = "UTF-8";

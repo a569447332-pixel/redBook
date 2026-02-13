@@ -185,4 +185,12 @@ public class SecurityUtils
                 .anyMatch(x -> Constants.SUPER_ADMIN.equals(x) || PatternMatchUtils.simpleMatch(x, role));
     }
 
+    /**
+     * 判断是否为匿名用户（未登录）
+     */
+    public static boolean isAnonymous() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return principal instanceof String && "anonymousUser".equals(principal);
+    }
+
 }

@@ -134,3 +134,15 @@ xss:
   excludes: /system/notice
   # 匹配链接
   urlPatterns: /system/*,/monitor/*,/tool/*
+
+wechat:
+    # 你的小程序appid
+    appid: wx7c056286cae909ff
+    # 你的小程序secret
+    secret: a1faec039563d732ef2779ad12aa1178
+
+email:
+  qq: 569447332@qq.com          # 你的发件邮箱
+  code: jvpqkakkpwxobebi         # 你的邮箱授权码
+  smtp-host: smtp.qq.com         # SMTP 服务器
+  smtp-port: 587                 # SMTP 端口
